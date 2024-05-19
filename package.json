@@ -22,7 +22,7 @@
 		"constructs": "^10.3.0"
 	},
 	"dependencies": {
-		"@trautonen/cdk-dns-validated-certificate": "^0.1.3",
+		"@trautonen/cdk-dns-validated-certificate": "0.1.3",
 		"cdk-bucket-with-objects": "^0.1.2-alpha"
 	}
 }
