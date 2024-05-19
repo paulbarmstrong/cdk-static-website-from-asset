@@ -13,8 +13,10 @@ import { DnsValidatedCertificate } from "@trautonen/cdk-dns-validated-certificat
 export type StaticWebsiteProps = {
 	asset: s3_assets.Asset,
 	indexDocument: string,
-	hostedZone?: route53.IHostedZone,
-	domainName?: string,
+	domains?: Array<{
+		domainName: string,
+		hostedZone: route53.IHostedZone
+	}>
 	bucketProps?: Partial<s3.BucketProps & BucketWithObjectsProps>,
 	distributionProps?: Partial<cloudfront.DistributionProps>,
 	deploymentLogGroup?: logs.ILogGroup
@@ -26,20 +28,22 @@ export class StaticWebsite extends Construct {
 	distribution: cloudfront.Distribution
 	constructor(scope: Construct, id: string, props: StaticWebsiteProps) {
 		super(scope, id)
-		if (props.domainName !== undefined && props.hostedZone === undefined) {
-			throw new Error("Cannot provide domainName without hostedZone.")
+
+		const domains = props.domains !== undefined ? props.domains : []
+
+		if (domains.length > 1) {
+			throw new Error("Multiple domains isn't supported yet.")
 		}
 
-		const domainName = props.hostedZone !== undefined ? (
-			props.domainName !== undefined ? props.domainName : props.hostedZone.zoneName
-		) : (
-			undefined
-		)
+		if (new Set(domains.map(domain => domain.domainName)).size !== domains.length) {
+			throw new Error("Domain names must be unique.")
+		}
 
-		const certificate = props.hostedZone !== undefined ? (
+		const certificate = domains.length > 0 ? (
 			new DnsValidatedCertificate(this, "Certificate", {
-				domainName: domainName!,
-				validationHostedZones: [{ hostedZone: props.hostedZone }],
+				domainName: domains[0].domainName,
+				alternativeDomainNames: domains.length > 1 ? domains.slice(1).map(domain => domain.domainName) : undefined,
+				validationHostedZones: domains.map(domain => ({ hostedZone: domain.hostedZone })),
 				certificateRegion: "us-east-1"
 			})
 		) : (
@@ -79,14 +83,17 @@ export class StaticWebsite extends Construct {
 					responseHttpStatus: 200
 				}
 			],
-			domainNames: domainName !== undefined ? [domainName] : undefined,
+			domainNames: domains.map(domain => domain.domainName),
 			certificate: certificate,
 			...props.distributionProps
 		})
 
-		new route53.ARecord(this, "DistributionARecord", {
-			zone: props.hostedZone!,
-			target: route53.RecordTarget.fromAlias(new route53_targets.CloudFrontTarget(this.distribution))
+		domains.forEach(domain => {
+			new route53.ARecord(this, `${domain.domainName}ARecord`, {
+				zone: domain.hostedZone!,
+				recordName: domain.domainName,
+				target: route53.RecordTarget.fromAlias(new route53_targets.CloudFrontTarget(this.distribution))
+			})
 		})
 
 		this.#bucketInternal.addObjectsFromAsset(props.asset)
