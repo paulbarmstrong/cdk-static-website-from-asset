@@ -32,6 +32,12 @@ https://www.npmjs.com/package/cdk-managed-objects-bucket).
 1. The total unzipped size of the Asset given to StaticWebsite must not exceed 5 gigabytes.
 2. Currently StaticWebsite's `route53Domains` accepts a maximum of one domain.
 
+### Installation
+
+```
+npm install cdk-static-website-from-asset
+```
+
 ### Usage
 
 Assuming we have:
