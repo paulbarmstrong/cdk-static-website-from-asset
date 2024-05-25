@@ -4,35 +4,33 @@ import * as iam from "aws-cdk-lib/aws-iam"
 import * as s3_assets from "aws-cdk-lib/aws-s3-assets"
 import * as cloudfront_origins from "aws-cdk-lib/aws-cloudfront-origins"
 import * as s3 from "aws-cdk-lib/aws-s3"
-import * as logs from "aws-cdk-lib/aws-logs"
 import * as route53 from "aws-cdk-lib/aws-route53"
 import * as route53_targets from "aws-cdk-lib/aws-route53-targets"
-import { BucketObject, BucketWithObjects, BucketWithObjectsProps, DeploymentAction } from "cdk-bucket-with-objects"
-import { DnsValidatedCertificate } from "@trautonen/cdk-dns-validated-certificate"
+import { ManagedObjectsBucket, ManagedObjectsBucketProps, ObjectChangeAction } from "cdk-managed-objects-bucket"
+import { DnsValidatedCertificate } from "aws-cdk-lib/aws-certificatemanager"
 
 export type StaticWebsiteProps = {
 	asset: s3_assets.Asset,
 	indexDocument: string,
-	domains?: Array<{
+	route53Domains?: Array<{
 		domainName: string,
 		hostedZone: route53.IHostedZone
 	}>
-	bucketProps?: Partial<s3.BucketProps & BucketWithObjectsProps>,
-	distributionProps?: Partial<cloudfront.DistributionProps>,
-	deploymentLogGroup?: logs.ILogGroup
+	bucketProps?: Partial<s3.BucketProps & ManagedObjectsBucketProps>,
+	distributionProps?: Partial<cloudfront.DistributionProps>
 }
 
 export class StaticWebsite extends Construct {
 	bucket: s3.Bucket
-	#bucketInternal: BucketWithObjects
+	#bucketInternal: ManagedObjectsBucket
 	distribution: cloudfront.Distribution
 	constructor(scope: Construct, id: string, props: StaticWebsiteProps) {
 		super(scope, id)
 
-		const domains = props.domains !== undefined ? props.domains : []
+		const domains = props.route53Domains !== undefined ? props.route53Domains : []
 
 		if (domains.length > 1) {
-			throw new Error("Multiple domains isn't supported yet.")
+			throw new Error("Multiple route53 domains isn't supported yet.")
 		}
 
 		if (new Set(domains.map(domain => domain.domainName)).size !== domains.length) {
@@ -42,15 +40,14 @@ export class StaticWebsite extends Construct {
 		const certificate = domains.length > 0 ? (
 			new DnsValidatedCertificate(this, "Certificate", {
 				domainName: domains[0].domainName,
-				alternativeDomainNames: domains.length > 1 ? domains.slice(1).map(domain => domain.domainName) : undefined,
-				validationHostedZones: domains.map(domain => ({ hostedZone: domain.hostedZone })),
-				certificateRegion: "us-east-1"
+				hostedZone: domains[0].hostedZone,
+				region: "us-east-1"
 			})
 		) : (
 			undefined
 		)
 
-		this.#bucketInternal = new BucketWithObjects(this, "Bucket", {
+		this.#bucketInternal = new ManagedObjectsBucket(this, "Bucket", {
 			blockPublicAccess: {
 				blockPublicPolicy: false,
 				blockPublicAcls: false,
@@ -58,7 +55,6 @@ export class StaticWebsite extends Construct {
 				restrictPublicBuckets: false
 			},
 			websiteIndexDocument: props.indexDocument,
-			deploymentLogGroup: props.deploymentLogGroup,
 			...props.bucketProps
 		})
 		this.bucket = this.#bucketInternal
@@ -95,13 +91,13 @@ export class StaticWebsite extends Construct {
 				target: route53.RecordTarget.fromAlias(new route53_targets.CloudFrontTarget(this.distribution))
 			})
 		})
-
-		this.#bucketInternal.addObjectsFromAsset(props.asset)
-		this.#bucketInternal.addDeploymentAction(DeploymentAction.cloudFrontDistributionInvalidation(this.distribution))
+		this.#bucketInternal.addObjectsFromAsset({ asset: props.asset })
+		this.#bucketInternal.addObjectChangeAction(ObjectChangeAction.cloudFrontInvalidation({
+			distribution: this.distribution
+		}))
 	}
 
-	addBucketObject(object: BucketObject) {
-		this.#bucketInternal.addObject(object)
+	addBucketObject(props: { key: string, body: string }) {
+		this.#bucketInternal.addObject(props)
 	}
 }
-
