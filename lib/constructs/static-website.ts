@@ -10,20 +10,58 @@ import { ManagedObjectsBucket, ManagedObjectsBucketProps, ObjectChangeAction } f
 import { DnsValidatedCertificate } from "aws-cdk-lib/aws-certificatemanager"
 
 export type StaticWebsiteProps = {
+	/** 
+	 * The [Asset](
+	 * https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_s3_assets-readme.html) to be
+	 * hosted as a static website.
+	 */
 	asset: s3_assets.Asset,
+	/**
+	 * The index document of the website. It should be the main HTML file within your Asset. It's
+	 * usually `index.html`.
+	 */
 	indexDocument: string,
+	/**
+	 * Route53-managed domain to be used for the static website.
+	 * 
+	 * Currently it supports a maximum
+	 * of 1 domain. To add multiple Route53 domains (or non Route53 domains) you can leave this
+	 * prop empty and specify your own domain and certificate in distributionProps.
+	 */
 	route53Domains?: Array<{
 		domainName: string,
 		hostedZone: route53.IHostedZone
 	}>,
+	/**
+	 * When the website Asset is updated, a CloudFront invalidation is created to allow the
+	 * new contents to start being served. This prop specifies whether to wait for the
+	 * invalidation to be completed before allowing the CloudFormation update to continue.
+	 * @default false
+	 */
 	waitForCloudFrontInvalidationCompletion?: boolean
+	/**
+	 * Overrides for the props for the underlying [Bucket](
+	 * https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_s3.Bucket.html).
+	 */
 	bucketProps?: Partial<s3.BucketProps & ManagedObjectsBucketProps>,
+	/**
+	 * Overrides for the props for the underlying [Distribution](
+	 * https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_cloudfront.Distribution.html).
+	 */
 	distributionProps?: Partial<cloudfront.DistributionProps>,
 }
 
+/**
+ * A construct that represents infrastructure for hosting an [Asset](
+ * https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_s3_assets-readme.html) as a static
+ * website.
+ */
 export class StaticWebsite extends Construct {
+	/** Underlying Bucket for the StaticWebsite */
 	bucket: s3.Bucket
+	/** @hidden */
 	#bucketInternal: ManagedObjectsBucket
+	/** Underlying Distribution for the StaticWebsite */
 	distribution: cloudfront.Distribution
 	constructor(scope: Construct, id: string, props: StaticWebsiteProps) {
 		super(scope, id)
@@ -31,7 +69,7 @@ export class StaticWebsite extends Construct {
 		const domains = props.route53Domains !== undefined ? props.route53Domains : []
 
 		if (domains.length > 1) {
-			throw new Error("Multiple route53 domains isn't supported yet.")
+			throw new Error("Multiple Route53 domains isn't supported yet.")
 		}
 
 		if (new Set(domains.map(domain => domain.domainName)).size !== domains.length) {
@@ -99,7 +137,16 @@ export class StaticWebsite extends Construct {
 		}))
 	}
 
-	addBucketObject(props: { key: string, body: string }) {
+	/**
+	 * Add an object to the static website's bucket based on a given key and body. Deploy-time
+	 * values from the CDK like resource ARNs can be used here.
+	 */
+	addBucketObject(props: {
+		/** S3 object key for the object. */
+		key: string,
+		/** Content to be stored within the S3 object. */
+		body: string
+	}) {
 		this.#bucketInternal.addObject(props)
 	}
 }

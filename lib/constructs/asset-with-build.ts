@@ -25,21 +25,23 @@ export class AssetWithBuild extends s3_assets.Asset {
 }
 
 function bundle(props: AssetWithBuildProps, outputDir: string) {
-	const exec = (command: string, options?: { env?: Record<string, string>}) => {
-		try {
-			execSync(command, {
-				cwd: props.path,
-				env: {
-					...process.env,
-					...options?.env
-				},
-				stdio: "pipe"
-			})
-		} catch (error) {
-			if ((error as any).stdout) process.stdout.write((error as any).stdout)
-			if ((error as any).stderr) process.stdout.write((error as any).stderr)
-			throw error
+	if (props.build !== undefined) {
+		const exec = (command: string, options?: { env?: Record<string, string>}) => {
+			try {
+				execSync(command, {
+					cwd: props.path,
+					env: {
+						...process.env,
+						...options?.env
+					},
+					stdio: "pipe"
+				})
+			} catch (error) {
+				if ((error as any).stdout) process.stdout.write((error as any).stdout)
+				if ((error as any).stderr) process.stdout.write((error as any).stderr)
+				throw error
+			}
 		}
+		props.build(exec, outputDir)
 	}
-	if (props.build !== undefined) props.build(exec, outputDir)
 }

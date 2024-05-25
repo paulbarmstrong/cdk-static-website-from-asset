@@ -7,7 +7,8 @@
 	"typings": "dist/index",
 	"scripts": {
 		"build": "tsc",
-		"prepublishOnly": "npm run build"
+		"generate-docs": "npx typedoc --readme none --entryDocument index.md --githubPages false --sourceLinkTemplate 'https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/{path}#L{line}' --excludeExternals --plugin typedoc-plugin-markdown --out docs lib/index.ts",
+		"prepublishOnly": "npm run build && npm run generate-docs"
 	},
 	"license": "MIT",
 	"repository": {
@@ -15,7 +16,7 @@
 		"url": "https://github.com/paulbarmstrong/cdk-static-website-from-asset.git"
 	},
 	"devDependencies": {
-		"typedoc": "^0.25.4",
+		"typedoc": "^0.25.13",
 		"typedoc-plugin-markdown": "^3.17.1",
 		"typescript": "^5.4.5"
 	},
@@ -25,5 +26,6 @@
 	},
 	"dependencies": {
 		"cdk-managed-objects-bucket": "^0.1.6-alpha"
-	}
+	},
+	"keywords": ["cdk", "website", "asset", "construct", "hosting", "deployment", "experimental"]
 }
