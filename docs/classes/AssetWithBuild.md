@@ -2,6 +2,11 @@
 
 # Class: AssetWithBuild
 
+An extension of the [Asset](
+https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_s3_assets-readme.html) construct for
+conveniently building your app. It simplifies Asset's `bundling` prop with its own `build` prop
+which allows directly specifying a series of commands to run.
+
 ## Hierarchy
 
 - `Asset`
@@ -26,7 +31,7 @@
 | :------ | :------ |
 | `scope` | `Construct` |
 | `id` | `string` |
-| `props` | `AssetWithBuildProps` |
+| `props` | [`AssetWithBuildProps`](../index.md#assetwithbuildprops) |
 
 #### Returns
 
@@ -38,4 +43,4 @@ s3\_assets.Asset.constructor
 
 #### Defined in
 
-[constructs/asset-with-build.ts:11](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/asset-with-build.ts#L11)
+[constructs/asset-with-build.ts:29](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/asset-with-build.ts#L29)

@@ -51,7 +51,7 @@ Construct.constructor
 
 #### Defined in
 
-[constructs/static-website.ts:66](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/static-website.ts#L66)
+[constructs/static-website.ts:67](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/static-website.ts#L67)
 
 ## Properties
 
@@ -63,7 +63,7 @@ Underlying Bucket for the StaticWebsite
 
 #### Defined in
 
-[constructs/static-website.ts:61](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/static-website.ts#L61)
+[constructs/static-website.ts:62](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/static-website.ts#L62)
 
 ___
 
@@ -75,7 +75,7 @@ Underlying Distribution for the StaticWebsite
 
 #### Defined in
 
-[constructs/static-website.ts:65](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/static-website.ts#L65)
+[constructs/static-website.ts:66](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/static-website.ts#L66)
 
 ## Methods
 
@@ -100,4 +100,4 @@ values from the CDK like resource ARNs can be used here.
 
 #### Defined in
 
-[constructs/static-website.ts:144](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/static-website.ts#L144)
+[constructs/static-website.ts:145](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/static-website.ts#L145)

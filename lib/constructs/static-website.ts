@@ -36,6 +36,7 @@ export type StaticWebsiteProps = {
 	 * When the website Asset is updated, a CloudFront invalidation is created to allow the
 	 * new contents to start being served. This prop specifies whether to wait for the
 	 * invalidation to be completed before allowing the CloudFormation update to continue.
+	 * 
 	 * @default false
 	 */
 	waitForCloudFrontInvalidationCompletion?: boolean

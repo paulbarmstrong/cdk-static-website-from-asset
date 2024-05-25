@@ -72,3 +72,7 @@ export class MyStack extends cdk.Stack {
 	}
 }
 ```
+
+### Documentation
+
+Please see [the low level documentation](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/docs/index.md) for more details.

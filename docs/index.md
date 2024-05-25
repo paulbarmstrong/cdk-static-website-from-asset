@@ -11,9 +11,20 @@ cdk-static-website-from-asset
 
 ### Type Aliases
 
+- [AssetWithBuildProps](index.md#assetwithbuildprops)
 - [StaticWebsiteProps](index.md#staticwebsiteprops)
 
 ## Type Aliases
+
+### AssetWithBuildProps
+
+Ƭ **AssetWithBuildProps**: `Omit`\<`s3_assets.AssetProps`, ``"bundling"``\> & \{ `build?`: (`exec`: (`command`: `string`, `options?`: \{ `env?`: `Record`\<`string`, `string`\>  }) => `void`, `outputDir`: `string`) => `void`  }
+
+#### Defined in
+
+[constructs/asset-with-build.ts:6](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/asset-with-build.ts#L6)
+
+___
 
 ### StaticWebsiteProps
 
