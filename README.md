@@ -12,17 +12,25 @@ code, the commands (if any) used to build it, optionally a Route53 domain, and t
 this package take care of building and deploying it. It provides two constructs:
 
 ##### AssetWithBuild
-An extension of the [`Asset`](
+An extension of the [Asset](
 https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_s3_assets-readme.html) construct for
 conveniently building your app.
 
 ##### StaticWebsite
-A construct that represents infrastructure for hosting an `Asset` as a static website. You can
+A construct that represents infrastructure for hosting an Asset as a static website. You can
 optionally:
 * Add a Route53 domain with the `route53Domains` prop.
 * Add deploy-time information from your CDK with the `addBucketObject` method.
 * Tweak the underlying lower level constructs and their props. For example, you could add your
 own non-Route53 domain by adding your own certificate to the distribution.
+
+StaticWebsite deploys Asset changes very quickly since it uses [ManagedObjectsBucket](
+https://www.npmjs.com/package/cdk-managed-objects-bucket).
+
+### Limitations
+
+1. The total unzipped size of the Asset given to StaticWebsite must not exceed 5 gigabytes.
+2. Currently StaticWebsite's `route53Domains` accepts a maximum of one domain.
 
 ### Usage
 
