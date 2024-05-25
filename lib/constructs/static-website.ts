@@ -15,9 +15,10 @@ export type StaticWebsiteProps = {
 	route53Domains?: Array<{
 		domainName: string,
 		hostedZone: route53.IHostedZone
-	}>
+	}>,
+	waitForCloudFrontInvalidationCompletion?: boolean
 	bucketProps?: Partial<s3.BucketProps & ManagedObjectsBucketProps>,
-	distributionProps?: Partial<cloudfront.DistributionProps>
+	distributionProps?: Partial<cloudfront.DistributionProps>,
 }
 
 export class StaticWebsite extends Construct {
@@ -93,7 +94,8 @@ export class StaticWebsite extends Construct {
 		})
 		this.#bucketInternal.addObjectsFromAsset({ asset: props.asset })
 		this.#bucketInternal.addObjectChangeAction(ObjectChangeAction.cloudFrontInvalidation({
-			distribution: this.distribution
+			distribution: this.distribution,
+			waitForCompletion: props.waitForCloudFrontInvalidationCompletion
 		}))
 	}
 
