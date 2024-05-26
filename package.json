@@ -1,6 +1,6 @@
 {
 	"name": "cdk-static-website-from-asset",
-	"version": "0.1.2-alpha",
+	"version": "0.1.3-alpha",
 	"author": "Paul B. Armstrong",
 	"description": "A CDK construct for hosting a static website based on an Asset, and an Asset construct extension to help with building apps from source files.",
 	"main": "dist/index",

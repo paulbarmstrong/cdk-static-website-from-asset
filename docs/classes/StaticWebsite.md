@@ -100,4 +100,4 @@ values from the CDK like resource ARNs can be used here.
 
 #### Defined in
 
-[constructs/static-website.ts:133](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/static-website.ts#L133)
+[constructs/static-website.ts:136](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/static-website.ts#L136)

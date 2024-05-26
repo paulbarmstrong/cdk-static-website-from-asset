@@ -95,7 +95,10 @@ export class StaticWebsite extends Construct {
 		this.bucket = this.#bucketInternal
 
 		this.distribution = new cloudfront.Distribution(this, "Distribution", {
-			defaultBehavior: { origin: new cloudfront_origins.S3Origin(this.bucket) },
+			defaultBehavior: {
+				origin: new cloudfront_origins.S3Origin(this.bucket),
+				viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
+			},
 			errorResponses: [
 				{
 					httpStatus: 403,
