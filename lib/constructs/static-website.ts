@@ -43,7 +43,7 @@ export type StaticWebsiteProps = {
 	 * Overrides for the props for the underlying [Distribution](
 	 * https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_cloudfront.Distribution.html).
 	 */
-	distributionProps?: Partial<cloudfront.DistributionProps>,
+	distributionProps?: (bucket: s3.Bucket) => Partial<cloudfront.DistributionProps>,
 }
 
 /**
@@ -112,7 +112,7 @@ export class StaticWebsite extends Construct {
 			],
 			domainNames: domains.map(domain => domain.domainName),
 			certificate: certificate,
-			...props.distributionProps
+			...(props.distributionProps !== undefined ? props.distributionProps(this.bucket) : {})
 		})
 
 		domains.forEach(domain => {
