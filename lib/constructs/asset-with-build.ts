@@ -1,9 +1,10 @@
 import { execSync } from "child_process"
+import * as crypto from "crypto"
 import { Construct } from "constructs"
 import * as cdk from "aws-cdk-lib"
 import * as s3_assets from "aws-cdk-lib/aws-s3-assets"
 
-export type AssetWithBuildProps = Omit<s3_assets.AssetProps, "bundling"> & {
+export type AssetWithBuildProps = Omit<s3_assets.AssetProps, "bundling" | "assetHashType" | "assetHash"> & {
 	/** Function specifying how contents at the Asset's path prop should be built. */
 	build?: (
 		/** Function for executing a command. */
@@ -27,6 +28,9 @@ export type AssetWithBuildProps = Omit<s3_assets.AssetProps, "bundling"> & {
  */
 export class AssetWithBuild extends s3_assets.Asset {
 	constructor(scope: Construct, id: string, props: AssetWithBuildProps) {
+		const assetHash = crypto.createHash("sha256")
+			.update(cdk.FileSystem.fingerprint(props.path) + getBuildPropHash(props))
+			.digest("hex")
 		super(scope, id, {
 			...props,
 			bundling: {
@@ -37,9 +41,19 @@ export class AssetWithBuild extends s3_assets.Asset {
 					}
 				},
 				image: cdk.DockerImage.fromRegistry("alpine")
-			}
+			},
+			assetHashType: cdk.AssetHashType.CUSTOM,
+			assetHash: assetHash
 		})
 	}
+}
+
+function getBuildPropHash(props: AssetWithBuildProps): string {
+	const instructions: Array<any> = []
+	if (props.build !== undefined) {
+		props.build((command, options) => instructions.push([command, options]), "OUTPUT_DIR")
+	}
+	return crypto.createHash("sha256").update(JSON.stringify(instructions)).digest("hex")
 }
 
 function bundle(props: AssetWithBuildProps, outputDir: string) {

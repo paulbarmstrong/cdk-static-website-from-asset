@@ -43,4 +43,4 @@ s3\_assets.Asset.constructor
 
 #### Defined in
 
-[constructs/asset-with-build.ts:29](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/asset-with-build.ts#L29)
+[constructs/asset-with-build.ts:30](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/lib/constructs/asset-with-build.ts#L30)
