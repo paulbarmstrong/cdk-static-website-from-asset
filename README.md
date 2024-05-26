@@ -42,8 +42,8 @@ npm install cdk-static-website-from-asset
 
 Assuming we have:
 1. An existing delegated hosted zone for `mydomain.com` with ID `XXXXXXXXXXXXXXXXXXXXX`.
-2. A react app source package at `../path-to-my-react-app-package` that's by react-scripts (like
-any react app from create-react-app).
+2. A react app source package at `../path-to-my-react-app-package` that's built by react-scripts
+(like any react app from create-react-app).
 
 A CDK stack for hosting the app at `mydomain.com` looks like this:
 
@@ -72,7 +72,6 @@ export class MyStack extends cdk.Stack {
 		})
 		const website: StaticWebsite = new StaticWebsite(this, "Website", {
 			asset: asset,
-			indexDocument: "index.html",
 			route53Domains: [{ domainName: "mydomain.com", hostedZone: hostedZone }]
 		})
 	}
@@ -81,4 +80,6 @@ export class MyStack extends cdk.Stack {
 
 ### Documentation
 
-Please see [the low level documentation](https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/docs/index.md) for more details.
+Please see [the low level documentation](
+https://github.com/paulbarmstrong/cdk-static-website-from-asset/blob/main/docs/index.md
+) for more details.

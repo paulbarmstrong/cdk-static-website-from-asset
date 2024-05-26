@@ -1,6 +1,5 @@
 import { Construct } from "constructs"
 import * as cloudfront from "aws-cdk-lib/aws-cloudfront"
-import * as iam from "aws-cdk-lib/aws-iam"
 import * as s3_assets from "aws-cdk-lib/aws-s3-assets"
 import * as cloudfront_origins from "aws-cdk-lib/aws-cloudfront-origins"
 import * as s3 from "aws-cdk-lib/aws-s3"
@@ -13,20 +12,15 @@ export type StaticWebsiteProps = {
 	/** 
 	 * The [Asset](
 	 * https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_s3_assets-readme.html) to be
-	 * hosted as a static website.
+	 * hosted as a static website. StaticWebsite expects the index document to be "index.html"
 	 */
 	asset: s3_assets.Asset,
 	/**
-	 * The index document of the website. It should be the main HTML file within your Asset. It's
-	 * usually `index.html`.
-	 */
-	indexDocument: string,
-	/**
 	 * Route53-managed domain to be used for the static website.
 	 * 
-	 * Currently it supports a maximum
-	 * of 1 domain. To add multiple Route53 domains (or non Route53 domains) you can leave this
-	 * prop empty and specify your own domain and certificate in distributionProps.
+	 * Currently it supports a maximum of 1 domain. To add multiple Route53 domains (or non
+	 * Route53 domains) you can leave this prop empty and specify your own domain and
+	 * certificate in distributionProps.
 	 */
 	route53Domains?: Array<{
 		domainName: string,
@@ -88,34 +82,22 @@ export class StaticWebsite extends Construct {
 		)
 
 		this.#bucketInternal = new ManagedObjectsBucket(this, "Bucket", {
-			blockPublicAccess: {
-				blockPublicPolicy: false,
-				blockPublicAcls: false,
-				ignorePublicAcls: false,
-				restrictPublicBuckets: false
-			},
-			websiteIndexDocument: props.indexDocument,
+			websiteIndexDocument: "index.html",
+			publicReadAccess: true,
 			...props.bucketProps
 		})
 		this.bucket = this.#bucketInternal
-		this.bucket.addToResourcePolicy(new iam.PolicyStatement({
-			principals: [new iam.StarPrincipal()],
-			actions: ["s3:GetObject"],
-			resources: [`arn:aws:s3:::${this.bucket.bucketName}/*`]
-		}))
 
 		this.distribution = new cloudfront.Distribution(this, "Distribution", {
-			defaultBehavior: {
-				origin: new cloudfront_origins.S3Origin(this.bucket)
-			},
+			defaultBehavior: { origin: new cloudfront_origins.S3Origin(this.bucket) },
 			errorResponses: [
 				{
 					httpStatus: 403,
-					responsePagePath: `/${props.indexDocument}`,
+					responsePagePath: "/index.html",
 					responseHttpStatus: 200
 				}, {
 					httpStatus: 404,
-					responsePagePath: `/${props.indexDocument}`,
+					responsePagePath: "/index.html",
 					responseHttpStatus: 200
 				}
 			],
