@@ -84,6 +84,12 @@ export class StaticWebsite extends Construct {
 		this.#bucketInternal = new ManagedObjectsBucket(this, "Bucket", {
 			websiteIndexDocument: "index.html",
 			publicReadAccess: true,
+			blockPublicAccess: {
+				blockPublicPolicy: false,
+				blockPublicAcls: false,
+				ignorePublicAcls: false,
+				restrictPublicBuckets: false
+			},
 			...props.bucketProps
 		})
 		this.bucket = this.#bucketInternal
