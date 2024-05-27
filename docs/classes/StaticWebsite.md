@@ -25,7 +25,7 @@ website.
 
 ### Methods
 
-- [addBucketObject](StaticWebsite.md#addbucketobject)
+- [addObject](StaticWebsite.md#addobject)
 
 ## Constructors
 
@@ -79,9 +79,9 @@ Underlying Distribution for the StaticWebsite
 
 ## Methods
 
-### addBucketObject
+### addObject
 
-▸ **addBucketObject**(`props`): `void`
+▸ **addObject**(`props`): `void`
 
 Add an object to the static website's bucket based on a given key and body. Deploy-time
 values from the CDK like resource ARNs can be used here.

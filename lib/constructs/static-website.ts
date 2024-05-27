@@ -133,7 +133,7 @@ export class StaticWebsite extends Construct {
 	 * Add an object to the static website's bucket based on a given key and body. Deploy-time
 	 * values from the CDK like resource ARNs can be used here.
 	 */
-	addBucketObject(props: {
+	addObject(props: {
 		/** S3 object key for the object. */
 		key: string,
 		/** Content to be stored within the S3 object. */

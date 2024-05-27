@@ -20,7 +20,7 @@ conveniently building your app.
 A construct that represents infrastructure for hosting an Asset as a static website. You can
 optionally:
 * Add a Route53 domain with the `domains` prop.
-* Add deploy-time information from your CDK with the `addBucketObject` method.
+* Add deploy-time information from your CDK with the `addObject` method.
 * Tweak the underlying lower level constructs and their props. For example, you could add your
 own non-Route53 domain by adding your own certificate to the distribution.
 
