@@ -22,7 +22,7 @@ export type StaticWebsiteProps = {
 	 * Route53 domains) you can leave this prop empty and specify your own domain and
 	 * certificate in distributionProps.
 	 */
-	route53Domains?: Array<{
+	domains?: Array<{
 		domainName: string,
 		hostedZone: route53.IHostedZone
 	}>,
@@ -61,7 +61,7 @@ export class StaticWebsite extends Construct {
 	constructor(scope: Construct, id: string, props: StaticWebsiteProps) {
 		super(scope, id)
 
-		const domains = props.route53Domains !== undefined ? props.route53Domains : []
+		const domains = props.domains ?? []
 
 		if (domains.length > 1) {
 			throw new Error("Multiple Route53 domains isn't supported yet.")

@@ -37,7 +37,7 @@ ___
 | `asset` | `s3_assets.Asset` | The [Asset]( https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_s3_assets-readme.html) to be hosted as a static website. StaticWebsite expects the index document to be "index.html" |
 | `bucketProps?` | `Partial`\<`s3.BucketProps` & `ManagedObjectsBucketProps`\> | Overrides for the props for the underlying [Bucket]( https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_s3.Bucket.html). |
 | `distributionProps?` | (`bucket`: `s3.Bucket`) => `Partial`\<`cloudfront.DistributionProps`\> | - |
-| `route53Domains?` | \{ `domainName`: `string` ; `hostedZone`: `route53.IHostedZone`  }[] | Route53-managed domain to be used for the static website. Currently it supports a maximum of 1 domain. To add multiple Route53 domains (or non Route53 domains) you can leave this prop empty and specify your own domain and certificate in distributionProps. |
+| `domains?` | \{ `domainName`: `string` ; `hostedZone`: `route53.IHostedZone`  }[] | Route53-managed domain to be used for the static website. Currently it supports a maximum of 1 domain. To add multiple Route53 domains (or non Route53 domains) you can leave this prop empty and specify your own domain and certificate in distributionProps. |
 | `waitForCloudFrontInvalidationCompletion?` | `boolean` | When the website Asset is updated, a CloudFront invalidation is created to allow the new contents to start being served. This prop specifies whether to wait for the invalidation to be completed before allowing the CloudFormation update to continue. **`Default`** ```ts false ``` |
 
 #### Defined in

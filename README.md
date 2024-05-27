@@ -19,7 +19,7 @@ conveniently building your app.
 ##### StaticWebsite
 A construct that represents infrastructure for hosting an Asset as a static website. You can
 optionally:
-* Add a Route53 domain with the `route53Domains` prop.
+* Add a Route53 domain with the `domains` prop.
 * Add deploy-time information from your CDK with the `addBucketObject` method.
 * Tweak the underlying lower level constructs and their props. For example, you could add your
 own non-Route53 domain by adding your own certificate to the distribution.
@@ -30,7 +30,7 @@ https://www.npmjs.com/package/cdk-managed-objects-bucket).
 ### Limitations
 
 1. The total unzipped size of the Asset given to StaticWebsite must not exceed 5 gigabytes.
-2. Currently StaticWebsite's `route53Domains` accepts a maximum of one domain.
+2. Currently StaticWebsite's `domains` accepts a maximum of one domain.
 
 ### Installation
 
@@ -72,7 +72,7 @@ export class MyStack extends cdk.Stack {
 		})
 		const website: StaticWebsite = new StaticWebsite(this, "Website", {
 			asset: asset,
-			route53Domains: [{ domainName: "mydomain.com", hostedZone: hostedZone }]
+			domains: [{ domainName: "mydomain.com", hostedZone: hostedZone }]
 		})
 	}
 }
