@@ -1,4 +1,4 @@
-[cdk-static-website-from-asset](../index.md) / AssetWithBuild
+[@paulbarmstrong/cdk-static-website-from-asset](../index.md) / AssetWithBuild
 
 # Class: AssetWithBuild
 

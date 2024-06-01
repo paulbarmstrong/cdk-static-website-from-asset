@@ -35,7 +35,7 @@ https://www.npmjs.com/package/cdk-managed-objects-bucket).
 ### Installation
 
 ```
-npm install cdk-static-website-from-asset
+npm install @paulbarmstrong/cdk-static-website-from-asset
 ```
 
 ### Usage
@@ -51,7 +51,7 @@ A CDK stack for hosting the app at `mydomain.com` looks like this:
 import * as cdk from "aws-cdk-lib"
 import * as route53 from "aws-cdk-lib/aws-route53"
 import * as s3_assets from "aws-cdk-lib/aws-s3-assets"
-import { AssetWithBuild, StaticWebsite } from "cdk-static-website-from-asset"
+import { AssetWithBuild, StaticWebsite } from "@paulbarmstrong/cdk-static-website-from-asset"
 import { Construct } from "constructs"
 
 export class MyStack extends cdk.Stack {

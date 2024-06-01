@@ -1,4 +1,4 @@
-[cdk-static-website-from-asset](../index.md) / StaticWebsite
+[@paulbarmstrong/cdk-static-website-from-asset](../index.md) / StaticWebsite
 
 # Class: StaticWebsite
 

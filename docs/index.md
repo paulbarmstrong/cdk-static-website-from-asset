@@ -1,6 +1,6 @@
-cdk-static-website-from-asset
+@paulbarmstrong/cdk-static-website-from-asset
 
-# cdk-static-website-from-asset
+# @paulbarmstrong/cdk-static-website-from-asset
 
 ## Table of contents
 
