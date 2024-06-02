@@ -5,7 +5,7 @@ import * as cloudfront_origins from "aws-cdk-lib/aws-cloudfront-origins"
 import * as s3 from "aws-cdk-lib/aws-s3"
 import * as route53 from "aws-cdk-lib/aws-route53"
 import * as route53_targets from "aws-cdk-lib/aws-route53-targets"
-import { ManagedObjectsBucket, ManagedObjectsBucketProps, ObjectChangeAction } from "cdk-managed-objects-bucket"
+import { ManagedObjectsBucket, ManagedObjectsBucketProps, ObjectChangeAction } from "@paulbarmstrong/cdk-managed-objects-bucket"
 import { DnsValidatedCertificate } from "aws-cdk-lib/aws-certificatemanager"
 
 export type StaticWebsiteProps = {
