@@ -25,7 +25,7 @@ optionally:
 own non-Route53 domain by adding your own certificate to the distribution.
 
 StaticWebsite deploys Asset changes very quickly since it uses [ManagedObjectsBucket](
-https://www.npmjs.com/package/cdk-managed-objects-bucket).
+https://www.npmjs.com/package/@paulbarmstrong/cdk-managed-objects-bucket).
 
 ### Limitations
 
